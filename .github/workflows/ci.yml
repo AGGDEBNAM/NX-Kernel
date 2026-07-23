@@ -1,0 +1,36 @@
+name: NX Platform CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: PowerShell/PowerShell@v1
+
+      - name: Show PowerShell Version
+        run: pwsh -Command '$PSVersionTable.PSVersion'
+
+      - name: Verify Repository Files
+        run: |
+          test -f README.md
+          test -f CHANGELOG.md
+          test -f CONTRIBUTING.md
+          test -f LICENSE
+          test -f nx.ps1
+
+      - name: Run NX Platform
+        run: pwsh ./nx.ps1 version
